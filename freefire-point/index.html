@@ -24,7 +24,7 @@ header{border-bottom:1px solid var(--line);background:rgba(8,9,12,.88);backdrop-
 <header><div class="wrap nav"><div class="brand"><div class="mark">VP</div><div>VERON POINT<small>TOURNAMENT SCOREBOARD</small></div></div><div class="tag">FREE FIRE • AUTO SCORE</div></div></header>
 <main class="wrap">
 <section class="hero"><div class="eyebrow">KALKULATOR TURNAMEN</div><h1>HITUNG POIN.<br><span>KUASAI KLASMEN.</span></h1><p>Input placement dan kill tiap match. Total poin dan peringkat tim dihitung otomatis. Aturan poin bisa kamu ubah sesuai regulasi turnamen.</p>
-<div class="toolbar"><button class="btn primary" id="addTeam">＋ Tambah Tim</button><button class="btn secondary" id="addMatch">＋ Tambah Match</button><button class="btn secondary" id="export">⇩ Ekspor CSV</button><button class="btn danger" id="reset">Reset Turnamen</button></div>
+<div class="toolbar"><button class="btn primary" id="addTeam">＋ Tambah Tim</button><button class="btn secondary" id="removeTeam">− Kurangi Tim</button><button class="btn secondary" id="addMatch">＋ Tambah Match</button><button class="btn secondary" id="export">⇩ Ekspor CSV</button><button class="btn danger" id="reset">Reset Turnamen</button></div>
 <div class="stats"><div class="stat"><label>JUMLAH TIM</label><strong id="teamCount">12</strong></div><div class="stat"><label>MATCH AKTIF</label><strong id="matchCount">1</strong></div><div class="stat"><label>POIN TERTINGGI</label><strong id="topScore">0</strong></div></div>
 </section>
 <section class="panel"><div class="panel-head"><div><h2>Input Hasil Match</h2><div class="sub">Pilih match, lalu isi posisi akhir dan jumlah kill setiap tim.</div></div><div id="matchTabs" class="match-tabs"></div></div>
@@ -74,6 +74,7 @@ document.getElementById("inputRows").addEventListener("change",e=>{const el=e.ta
 document.getElementById("placementRules").addEventListener("change",e=>{if(e.target.dataset.rule){state.placement[e.target.dataset.rule]=Math.max(0,Number(e.target.value)||0);render()}});
 document.getElementById("killPoint").addEventListener("change",e=>{state.killPoint=Math.max(0,Number(e.target.value)||0);render()});
 document.getElementById("addTeam").addEventListener("click",()=>{const n=matchCount();state.teams.push({id:nextId++,name:"Tim "+String(state.teams.length+1).padStart(2,"0"),matches:Array.from({length:n},()=>({placement:"",kills:0}))});render()});
+document.getElementById("removeTeam").addEventListener("click",()=>{if(state.teams.length<=1){alert("Minimal harus ada 1 tim.");return;}const last=state.teams[state.teams.length-1];if(!confirm("Hapus "+last.name+" beserta semua data match tim ini?"))return;state.teams.pop();render()});
 document.getElementById("addMatch").addEventListener("click",()=>{const n=matchCount();ensureMatches(n+1);state.active=n;render()});
 document.getElementById("defaultRules").addEventListener("click",()=>{state.placement={...defaultPlacement};state.killPoint=1;render()});
 document.getElementById("reset").addEventListener("click",()=>{if(!confirm("Hapus semua hasil turnamen dan mulai dari 12 tim kosong?"))return;state={teams:Array.from({length:12},(_,i)=>({id:i+1,name:"Tim "+String(i+1).padStart(2,"0"),matches:[{placement:"",kills:0}]})),active:0,placement:{...defaultPlacement},killPoint:1};nextId=13;render()});
