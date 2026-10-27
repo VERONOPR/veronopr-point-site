@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#09090b">
 <meta name="description" content="Kalkulator poin turnamen Free Fire — hitung placement, kill, dan klasemen otomatis.">
-<title>FF Point Arena — Kalkulator Turnamen Free Fire</title>
+<title>VERON POINT — Kalkulator Turnamen Free Fire</title>
 <style>
 :root{--bg:#08090c;--panel:#12141b;--panel2:#191c26;--text:#f7f7fb;--muted:#a9adbb;--red:#ff4058;--red2:#a70f2a;--line:#2b2e3a;--green:#4ade80;--gold:#ffc857}
 *{box-sizing:border-box}body{margin:0;color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 85% 0%,#35101a 0,transparent 32%),linear-gradient(145deg,#08090c,#10090d 58%,#190a10);min-height:100vh}
@@ -21,7 +21,7 @@ header{border-bottom:1px solid var(--line);background:rgba(8,9,12,.88);backdrop-
 </style>
 </head>
 <body>
-<header><div class="wrap nav"><div class="brand"><div class="mark">FF</div><div>FF POINT ARENA<small>TOURNAMENT SCOREBOARD</small></div></div><div class="tag">FREE FIRE • AUTO SCORE</div></div></header>
+<header><div class="wrap nav"><div class="brand"><div class="mark">VP</div><div>VERON POINT<small>TOURNAMENT SCOREBOARD</small></div></div><div class="tag">FREE FIRE • AUTO SCORE</div></div></header>
 <main class="wrap">
 <section class="hero"><div class="eyebrow">KALKULATOR TURNAMEN</div><h1>HITUNG POIN.<br><span>KUASAI KLASMEN.</span></h1><p>Input placement dan kill tiap match. Total poin dan peringkat tim dihitung otomatis. Aturan poin bisa kamu ubah sesuai regulasi turnamen.</p>
 <div class="toolbar"><button class="btn primary" id="addTeam">＋ Tambah Tim</button><button class="btn secondary" id="addMatch">＋ Tambah Match</button><button class="btn secondary" id="export">⇩ Ekspor CSV</button><button class="btn danger" id="reset">Reset Turnamen</button></div>
@@ -32,7 +32,7 @@ header{border-bottom:1px solid var(--line);background:rgba(8,9,12,.88);backdrop-
 <div class="small" style="margin-top:10px">Catatan: posisi yang belum diisi tidak mendapat poin posisi. Nilai poin dihitung otomatis saat kamu mengubah input.</div></section>
 <section class="panel"><div class="panel-head"><div><h2>🏆 Klasemen Turnamen</h2><div class="sub">Diurutkan otomatis dari total poin terbesar.</div></div></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Nama Tim</th><th>Total Kill</th><th>Total Poin</th><th>Rincian per Match</th></tr></thead><tbody id="leaderRows"></tbody></table></div></section>
 <section class="panel"><div class="panel-head"><div><h2>⚙️ Aturan Poin</h2><div class="sub">Default umum: 1 poin per kill dan poin placement bisa disesuaikan.</div></div><button class="btn secondary" id="defaultRules">Aturan Default</button></div><div class="rules-grid"><div><label>Poin kill</label><input class="num" id="killPoint" type="number" min="0" value="1"><div class="small" style="margin-top:8px">Nilai poin untuk setiap eliminasi.</div></div><div><label>Poin berdasarkan posisi akhir</label><div id="placementRules"></div></div></div><p class="small">Default yang tersedia: #1 = 12, #2 = 9, #3 = 8, #4 = 7, #5 = 6, #6 = 5, #7 = 4, #8 = 3, #9 = 2, #10 = 1, #11–12 = 0. Sesuaikan aturan ini dengan peraturan resmi turnamenmu.</p></section>
-</main><footer class="wrap footer">FF POINT ARENA • Scoreboard turnamen Free Fire • Data tersimpan di browser perangkat ini.</footer>
+</main><footer class="wrap footer">VERON POINT • Scoreboard turnamen Free Fire • Data tersimpan di browser perangkat ini.</footer>
 <script>
 const STORE="ff-point-arena-v1";
 const defaultPlacement={"1":12,"2":9,"3":8,"4":7,"5":6,"6":5,"7":4,"8":3,"9":2,"10":1,"11":0,"12":0};
