@@ -44,6 +44,8 @@
     .card .icon { width:45px; height:45px; display:grid; place-items:center; border-radius:14px; background:rgba(103,232,249,.1); font-size:1.35rem; margin-bottom:13px; }
     .card h3 { margin:0 0 7px; font-size:1.08rem; }
     .card p { margin:0; color:var(--muted); font-size:.94rem; }
+    .card .service-price { color:var(--cyan); font-size:2rem; line-height:1.2; font-weight:950; margin:4px 0 10px; }
+    .service-btn { margin-top:16px; padding:10px 13px; font-size:.9rem; }
     .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; counter-reset:step; }
     .step { padding:18px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.025); }
     .step:before { counter-increment:step; content:"0" counter(step); color:var(--cyan); font-weight:900; font-size:1.2rem; }
@@ -126,13 +128,13 @@
   <section id="layanan">
     <div class="wrap">
       <div class="section-head">
-        <h2>Informasi layanan</h2>
-        <p class="sub">Ganti judul dan deskripsi di bawah ini sesuai produk atau jasa yang kamu tawarkan.</p>
+        <h2>Jasa OPR & POINT</h2>
+        <p class="sub">Pilih layanan yang kamu butuhkan. Hubungi kami melalui WhatsApp untuk pemesanan.</p>
       </div>
       <div class="grid">
-        <article class="card"><div class="icon">✦</div><h3>Layanan Utama</h3><p>Jelaskan layanan utama VERONOPR+POINT secara singkat, jelas, dan mudah dipahami pelanggan.</p></article>
-        <article class="card"><div class="icon">⚡</div><h3>Proses Praktis</h3><p>Pelanggan bisa menghubungi kamu untuk menanyakan detail, harga, dan cara pemesanan.</p></article>
-        <article class="card"><div class="icon">💬</div><h3>Bantuan Pelanggan</h3><p>Hubungi kami melalui WhatsApp untuk mendapatkan informasi lebih lanjut.</p></article>
+        <article class="card"><div class="icon">⚡</div><h3>Jasa OPR</h3><p class="service-price">1.5K</p><p>Layanan OPR dengan harga mulai 1.5K.</p><a class="btn wa-link service-btn" href="#kontak">Pesan OPR ↗</a></article>
+        <article class="card"><div class="icon">✦</div><h3>Jasa POINT</h3><p class="service-price">1K</p><p>Layanan POINT dengan harga mulai 1K.</p><a class="btn wa-link service-btn" href="#kontak">Pesan POINT ↗</a></article>
+        <article class="card"><div class="icon">💬</div><h3>Bantuan Pelanggan</h3><p>Butuh informasi atau ingin memesan? Chat kami langsung melalui WhatsApp.</p><a class="btn wa-link service-btn" href="#kontak">Hubungi kami ↗</a></article>
       </div>
     </div>
   </section>
