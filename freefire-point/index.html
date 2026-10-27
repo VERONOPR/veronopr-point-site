@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#09090b">
+<meta name="description" content="Kalkulator poin turnamen Free Fire — hitung placement, kill, dan klasemen otomatis.">
+<title>FF Point Arena — Kalkulator Turnamen Free Fire</title>
+<style>
+:root{--bg:#08090c;--panel:#12141b;--panel2:#191c26;--text:#f7f7fb;--muted:#a9adbb;--red:#ff4058;--red2:#a70f2a;--line:#2b2e3a;--green:#4ade80;--gold:#ffc857}
+*{box-sizing:border-box}body{margin:0;color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 85% 0%,#35101a 0,transparent 32%),linear-gradient(145deg,#08090c,#10090d 58%,#190a10);min-height:100vh}
+button,input,select{font:inherit}button{cursor:pointer;border:0}.wrap{width:min(1180px,94%);margin:auto}
+header{border-bottom:1px solid var(--line);background:rgba(8,9,12,.88);backdrop-filter:blur(14px);position:sticky;top:0;z-index:5}
+.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{display:flex;align-items:center;gap:11px;font-weight:950;letter-spacing:.5px}.mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#ff4058,#771025);font-size:22px;font-weight:1000;box-shadow:0 8px 26px #ff405822}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:2px;margin-top:1px}.tag{border:1px solid #71303d;border-radius:999px;padding:7px 11px;color:#ff9baa;font-size:12px;font-weight:800}
+.hero{padding:42px 0 26px}.eyebrow{color:#ff7184;font-size:12px;letter-spacing:2px;font-weight:900}.hero h1{font-size:clamp(2.1rem,6vw,4rem);line-height:1.02;letter-spacing:-1.5px;margin:12px 0}.hero h1 span{color:var(--red)}.hero p{color:var(--muted);max-width:660px;margin:0;line-height:1.7}
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;margin:23px 0}.btn{border-radius:12px;padding:11px 15px;font-weight:850;display:inline-flex;align-items:center;justify-content:center;gap:7px}.primary{background:linear-gradient(135deg,#ff4058,#db1939);color:white;box-shadow:0 8px 24px #ff40581f}.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}.danger{background:#35121a;color:#ff9baa;border:1px solid #692332}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 22px}.stat,.panel{background:linear-gradient(145deg,rgba(24,26,36,.97),rgba(15,16,22,.97));border:1px solid var(--line);border-radius:18px}.stat{padding:17px}.stat label{font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:27px;margin-top:5px}.panel{padding:18px;margin:15px 0}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:15px}.panel h2{font-size:18px;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:5px}.match-tabs{display:flex;gap:7px;overflow:auto;padding-bottom:4px}.match-tab{white-space:nowrap;padding:9px 13px;border-radius:10px;background:#20232e;color:var(--muted);border:1px solid var(--line);font-weight:800}.match-tab.active{background:#511421;color:white;border-color:#ff4058}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:13px}table{border-collapse:collapse;width:100%;min-width:700px;background:#101219}th,td{text-align:left;padding:11px 12px;border-bottom:1px solid #282b35}th{background:#1a1d27;color:#c6c9d4;font-size:11px;text-transform:uppercase;letter-spacing:.7px}td{font-size:14px}tr:last-child td{border-bottom:0}.team-name{width:100%;min-width:120px;border:1px solid transparent;background:transparent;color:var(--text);padding:8px;border-radius:8px}.team-name:focus,.num:focus,select:focus{outline:2px solid #ff405866;border-color:#ff4058}.num,select{background:#0b0c11;border:1px solid #343744;color:var(--text);border-radius:9px;padding:9px;min-width:70px}.num{width:84px}.total{font-size:17px;font-weight:950;color:#ff7586}.rank{display:inline-grid;place-items:center;width:29px;height:29px;border-radius:9px;background:#262934;font-weight:900}.rank.first{background:#644814;color:#ffe08a}.rank.second{background:#343844;color:#e6e8ee}.rank.third{background:#573324;color:#ffbd9c}
+.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.rules-grid label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}.rule-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #282b35}.rule-row:last-child{border-bottom:0}.rule-row span{font-size:13px}.rule-row input{width:75px}.small{font-size:12px;color:var(--muted);line-height:1.6}.footer{padding:26px 0 40px;text-align:center;color:#858998;font-size:12px}
+@media(max-width:700px){.nav{min-height:64px}.tag{display:none}.hero{padding-top:30px}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:22px}.stat label{font-size:10px}.panel{padding:13px}.rules-grid{grid-template-columns:1fr}.toolbar .btn{flex:1}.panel-head .btn{padding:9px 11px}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav"><div class="brand"><div class="mark">FF</div><div>FF POINT ARENA<small>TOURNAMENT SCOREBOARD</small></div></div><div class="tag">FREE FIRE • AUTO SCORE</div></div></header>
+<main class="wrap">
+<section class="hero"><div class="eyebrow">KALKULATOR TURNAMEN</div><h1>HITUNG POIN.<br><span>KUASAI KLASMEN.</span></h1><p>Input placement dan kill tiap match. Total poin dan peringkat tim dihitung otomatis. Aturan poin bisa kamu ubah sesuai regulasi turnamen.</p>
+<div class="toolbar"><button class="btn primary" id="addTeam">＋ Tambah Tim</button><button class="btn secondary" id="addMatch">＋ Tambah Match</button><button class="btn secondary" id="export">⇩ Ekspor CSV</button><button class="btn danger" id="reset">Reset Turnamen</button></div>
+<div class="stats"><div class="stat"><label>JUMLAH TIM</label><strong id="teamCount">12</strong></div><div class="stat"><label>MATCH AKTIF</label><strong id="matchCount">1</strong></div><div class="stat"><label>POIN TERTINGGI</label><strong id="topScore">0</strong></div></div>
+</section>
+<section class="panel"><div class="panel-head"><div><h2>Input Hasil Match</h2><div class="sub">Pilih match, lalu isi posisi akhir dan jumlah kill setiap tim.</div></div><div id="matchTabs" class="match-tabs"></div></div>
+<div class="table-wrap"><table><thead><tr><th>Tim</th><th>Posisi</th><th>Kill</th><th>Poin Posisi</th><th>Poin Kill</th><th>Total Match</th></tr></thead><tbody id="inputRows"></tbody></table></div>
+<div class="small" style="margin-top:10px">Catatan: posisi yang belum diisi tidak mendapat poin posisi. Nilai poin dihitung otomatis saat kamu mengubah input.</div></section>
+<section class="panel"><div class="panel-head"><div><h2>🏆 Klasemen Turnamen</h2><div class="sub">Diurutkan otomatis dari total poin terbesar.</div></div></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Nama Tim</th><th>Total Kill</th><th>Total Poin</th><th>Rincian per Match</th></tr></thead><tbody id="leaderRows"></tbody></table></div></section>
+<section class="panel"><div class="panel-head"><div><h2>⚙️ Aturan Poin</h2><div class="sub">Default umum: 1 poin per kill dan poin placement bisa disesuaikan.</div></div><button class="btn secondary" id="defaultRules">Aturan Default</button></div><div class="rules-grid"><div><label>Poin kill</label><input class="num" id="killPoint" type="number" min="0" value="1"><div class="small" style="margin-top:8px">Nilai poin untuk setiap eliminasi.</div></div><div><label>Poin berdasarkan posisi akhir</label><div id="placementRules"></div></div></div><p class="small">Default yang tersedia: #1 = 12, #2 = 9, #3 = 8, #4 = 7, #5 = 6, #6 = 5, #7 = 4, #8 = 3, #9 = 2, #10 = 1, #11–12 = 0. Sesuaikan aturan ini dengan peraturan resmi turnamenmu.</p></section>
+</main><footer class="wrap footer">FF POINT ARENA • Scoreboard turnamen Free Fire • Data tersimpan di browser perangkat ini.</footer>
+<script>
+const STORE="ff-point-arena-v1";
+const defaultPlacement={"1":12,"2":9,"3":8,"4":7,"5":6,"6":5,"7":4,"8":3,"9":2,"10":1,"11":0,"12":0};
+let state={teams:Array.from({length:12},(_,i)=>({id:i+1,name:"Tim "+String(i+1).padStart(2,"0"),matches:[{placement:"",kills:0}]})),active:0,placement:{...defaultPlacement},killPoint:1};
+let nextId=13;
+function save(){try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){}}
+function load(){try{const x=JSON.parse(localStorage.getItem(STORE));if(x&&Array.isArray(x.teams)&&x.placement){state=x;nextId=Math.max(1,...state.teams.map(t=>t.id||0))+1;const n=Math.max(1,...state.teams.map(t=>t.matches.length));state.teams.forEach(t=>{while(t.matches.length<n)t.matches.push({placement:"",kills:0})});}}catch(e){}}
+function matchCount(){return Math.max(1,...state.teams.map(t=>t.matches.length))}
+function ensureMatches(n){state.teams.forEach(t=>{while(t.matches.length<n)t.matches.push({placement:"",kills:0})})}
+function score(t,i){const m=t.matches[i]||{placement:"",kills:0};return (m.placement?Number(state.placement[m.placement]||0):0)+Math.max(0,Number(m.kills)||0)*Math.max(0,Number(state.killPoint)||0)}
+function total(t){return t.matches.reduce((a,m,i)=>a+score(t,i),0)}
+function totalKills(t){return t.matches.reduce((a,m)=>a+Math.max(0,Number(m.kills)||0),0)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function render(){
+ const n=matchCount();ensureMatches(n);state.active=Math.min(state.active,n-1);
+ document.getElementById("teamCount").textContent=state.teams.length;
+ document.getElementById("matchCount").textContent=n;
+ document.getElementById("topScore").textContent=Math.max(0,...state.teams.map(total));
+ document.getElementById("matchTabs").innerHTML=Array.from({length:n},(_,i)=>'<button class="match-tab '+(i===state.active?'active':'')+'" data-match="'+i+'">Match '+(i+1)+'</button>').join("");
+ document.getElementById("inputRows").innerHTML=state.teams.map(t=>{const m=t.matches[state.active]||{placement:"",kills:0};const p=m.placement?Number(state.placement[m.placement]||0):0;const k=Math.max(0,Number(m.kills)||0)*Math.max(0,Number(state.killPoint)||0);return '<tr><td><input class="team-name" data-name="'+t.id+'" value="'+esc(t.name)+'" aria-label="Nama tim"></td><td><select data-place="'+t.id+'" aria-label="Posisi"><option value="">Pilih</option>'+Array.from({length:12},(_,j)=>'<option value="'+(j+1)+'" '+(String(m.placement)===String(j+1)?'selected':'')+'>#'+(j+1)+'</option>').join("")+'</select></td><td><input class="num" data-kill="'+t.id+'" type="number" min="0" step="1" value="'+(Number(m.kills)||0)+'" aria-label="Jumlah kill"></td><td>'+p+'</td><td>'+k+'</td><td class="total">'+score(t,state.active)+'</td></tr>'}).join("");
+ const sorted=[...state.teams].sort((a,b)=>total(b)-total(a)||totalKills(b)-totalKills(a)||a.name.localeCompare(b.name));
+ document.getElementById("leaderRows").innerHTML=sorted.map((t,i)=>'<tr><td><span class="rank '+(i<3?["first","second","third"][i]:"")+'">'+(i+1)+'</span></td><td><strong>'+esc(t.name)+'</strong></td><td>'+totalKills(t)+'</td><td class="total">'+total(t)+'</td><td>'+t.matches.map((m,j)=>"M"+(j+1)+": "+score(t,j)).join(" · ")+'</td></tr>').join("");
+ document.getElementById("killPoint").value=state.killPoint;
+ document.getElementById("placementRules").innerHTML=Array.from({length:12},(_,i)=>{const p=i+1;return '<div class="rule-row"><span>Posisi #'+p+'</span><input class="num" data-rule="'+p+'" type="number" min="0" value="'+Number(state.placement[p]||0)+'" aria-label="Poin posisi '+p+'"></div>'}).join("");
+ save();
+}
+document.getElementById("matchTabs").addEventListener("click",e=>{const b=e.target.closest("[data-match]");if(b){state.active=Number(b.dataset.match);render()}});
+document.getElementById("inputRows").addEventListener("change",e=>{const el=e.target;const t=state.teams.find(x=>x.id===Number(el.dataset.name||el.dataset.place||el.dataset.kill));if(!t)return;if(el.dataset.name)t.name=el.value.trim()||"Tim";if(el.dataset.place!==undefined)t.matches[state.active].placement=el.value;if(el.dataset.kill!==undefined)t.matches[state.active].kills=Math.max(0,Math.floor(Number(el.value)||0));render()});
+document.getElementById("placementRules").addEventListener("change",e=>{if(e.target.dataset.rule){state.placement[e.target.dataset.rule]=Math.max(0,Number(e.target.value)||0);render()}});
+document.getElementById("killPoint").addEventListener("change",e=>{state.killPoint=Math.max(0,Number(e.target.value)||0);render()});
+document.getElementById("addTeam").addEventListener("click",()=>{const n=matchCount();state.teams.push({id:nextId++,name:"Tim "+String(state.teams.length+1).padStart(2,"0"),matches:Array.from({length:n},()=>({placement:"",kills:0}))});render()});
+document.getElementById("addMatch").addEventListener("click",()=>{const n=matchCount();ensureMatches(n+1);state.active=n;render()});
+document.getElementById("defaultRules").addEventListener("click",()=>{state.placement={...defaultPlacement};state.killPoint=1;render()});
+document.getElementById("reset").addEventListener("click",()=>{if(!confirm("Hapus semua hasil turnamen dan mulai dari 12 tim kosong?"))return;state={teams:Array.from({length:12},(_,i)=>({id:i+1,name:"Tim "+String(i+1).padStart(2,"0"),matches:[{placement:"",kills:0}]})),active:0,placement:{...defaultPlacement},killPoint:1};nextId=13;render()});
+document.getElementById("export").addEventListener("click",()=>{const sorted=[...state.teams].sort((a,b)=>total(b)-total(a));const rows=[["Peringkat","Tim","Total Kill","Total Poin",...Array.from({length:matchCount()},(_,i)=>"Match "+(i+1))],...sorted.map((t,i)=>[i+1,t.name,totalKills(t),total(t),...Array.from({length:matchCount()},(_,j)=>score(t,j))])];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");const blob=new Blob(["\\ufeff"+csv],{type:"text/csv;charset=utf-8;"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="klasemen-ff-point-arena.csv";a.click();URL.revokeObjectURL(url)});
+load();render();
+</script>
+</body></html>
