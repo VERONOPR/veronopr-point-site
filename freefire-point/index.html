@@ -27,7 +27,12 @@ header{border-bottom:1px solid var(--line);background:rgba(8,9,12,.88);backdrop-
 <div class="toolbar"><button class="btn primary" id="addTeam">＋ Tambah Tim</button><button class="btn secondary" id="addMatch">＋ Tambah Match</button><button class="btn secondary" id="export">⇩ Ekspor CSV</button><button class="btn danger" id="reset">Reset Turnamen</button></div>
 <div class="stats"><div class="stat"><label>JUMLAH TIM</label><strong id="teamCount">12</strong></div><div class="stat"><label>MATCH AKTIF</label><strong id="matchCount">1</strong></div><div class="stat"><label>POIN TERTINGGI</label><strong id="topScore">0</strong></div></div>
 </section>
-<section class="panel"><div class="panel-head"><div><h2>Input Hasil Match</h2><div class="sub">Pilih match, lalu isi posisi akhir dan jumlah kill setiap tim.</div></div><div id="matchTabs" class="match-tabs"></div></div>
+
+<section class="panel"><div class="panel-head"><div><h2>📋 Isi Nama Tim Sekaligus</h2><div class="sub">Tempel daftar nama tim satu per baris. Nomor seperti “1.” akan dihapus otomatis.</div></div></div>
+<textarea id="bulkNames" rows="8" placeholder="1. Malzkanjut&#10;2. tatangwaluh&#10;3. R1K0 WRLD&#10;4. orell&#10;5. KyzX&#10;6. GENN&#10;7. butoijoe&#10;8. Regrs15&#10;9. imcrt&#10;10. 76apell&#10;11. paylater&#10;12. jhonz" style="display:block;width:100%;resize:vertical;background:#0b0c11;color:var(--text);border:1px solid #343744;border-radius:12px;padding:12px;line-height:1.6;margin-bottom:12px"></textarea>
+<div class="toolbar" style="margin:0"><button class="btn primary" id="applyNames">✓ Masukkan ke Kolom Tim</button><button class="btn secondary" id="copyNames">⧉ Salin Nama Tim</button></div>
+<div class="small" id="namesStatus" style="margin-top:10px">Tempel 12 nama di atas, lalu tekan “Masukkan ke Kolom Tim”. Nama akan langsung terisi pada kolom tim.</div></section>
+\n<section class="panel"><div class="panel-head"><div><h2>Input Hasil Match</h2><div class="sub">Pilih match, lalu isi posisi akhir dan jumlah kill setiap tim.</div></div><div id="matchTabs" class="match-tabs"></div></div>
 <div class="table-wrap"><table><thead><tr><th>Tim</th><th>Posisi</th><th>Kill</th><th>Poin Posisi</th><th>Poin Kill</th><th>Total Match</th></tr></thead><tbody id="inputRows"></tbody></table></div>
 <div class="small" style="margin-top:10px">Catatan: posisi yang belum diisi tidak mendapat poin posisi. Nilai poin dihitung otomatis saat kamu mengubah input.</div></section>
 <section class="panel"><div class="panel-head"><div><h2>🏆 Klasemen Turnamen</h2><div class="sub">Diurutkan otomatis dari total poin terbesar.</div></div></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Nama Tim</th><th>Total Kill</th><th>Total Poin</th><th>Rincian per Match</th></tr></thead><tbody id="leaderRows"></tbody></table></div></section>
@@ -68,6 +73,21 @@ document.getElementById("addMatch").addEventListener("click",()=>{const n=matchC
 document.getElementById("defaultRules").addEventListener("click",()=>{state.placement={...defaultPlacement};state.killPoint=1;render()});
 document.getElementById("reset").addEventListener("click",()=>{if(!confirm("Hapus semua hasil turnamen dan mulai dari 12 tim kosong?"))return;state={teams:Array.from({length:12},(_,i)=>({id:i+1,name:"Tim "+String(i+1).padStart(2,"0"),matches:[{placement:"",kills:0}]})),active:0,placement:{...defaultPlacement},killPoint:1};nextId=13;render()});
 document.getElementById("export").addEventListener("click",()=>{const sorted=[...state.teams].sort((a,b)=>total(b)-total(a));const rows=[["Peringkat","Tim","Total Kill","Total Poin",...Array.from({length:matchCount()},(_,i)=>"Match "+(i+1))],...sorted.map((t,i)=>[i+1,t.name,totalKills(t),total(t),...Array.from({length:matchCount()},(_,j)=>score(t,j))])];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");const blob=new Blob(["\\ufeff"+csv],{type:"text/csv;charset=utf-8;"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="klasemen-ff-point-arena.csv";a.click();URL.revokeObjectURL(url)});
-load();render();
+
+document.getElementById("applyNames").addEventListener("click",()=>{
+ const raw=document.getElementById("bulkNames").value;
+ const names=raw.split(/\\r?\\n/).map(s=>s.trim().replace(/^\\s*\\d+\\s*[.)、:-]\\s*/, "").trim()).filter(Boolean);
+ if(!names.length){document.getElementById("namesStatus").textContent="Masukkan daftar nama tim terlebih dahulu.";return}
+ while(state.teams.length<names.length){const n=matchCount();state.teams.push({id:nextId++,name:"Tim "+String(state.teams.length+1).padStart(2,"0"),matches:Array.from({length:n},()=>({placement:"",kills:0}))})}
+ names.forEach((name,i)=>{state.teams[i].name=name});
+ render();
+ document.getElementById("namesStatus").textContent=names.length+" nama tim berhasil dimasukkan ke kolom tim. "+(state.teams.length>names.length?"Tim tambahan tetap tersedia di bawah.":"");
+});
+document.getElementById("copyNames").addEventListener("click",async()=>{
+ const text=state.teams.map((t,i)=>(i+1)+". "+t.name).join("\\n");
+ try{await navigator.clipboard.writeText(text);document.getElementById("namesStatus").textContent="Daftar nama tim berhasil disalin."}
+ catch(e){const ta=document.getElementById("bulkNames");ta.value=text;ta.focus();ta.select();document.getElementById("namesStatus").textContent="Pilih teks yang muncul lalu salin secara manual."}
+});
+\nload();render();
 </script>
 </body></html>
