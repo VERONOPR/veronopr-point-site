@@ -156,8 +156,8 @@
   <section id="kontak">
     <div class="wrap">
       <div class="contact">
-        <div><h2>Yuk, ngobrol dengan kami.</h2><p>Punya pertanyaan atau ingin mengetahui layanan kami? Chat melalui WhatsApp.</p></div>
-        <a class="btn wa-link" href="#kontak">Mulai chat ↗</a>
+        <div><h2>MAU ORDER KANG CR/POINT?</h2><p>Langsung klik tombol di bawah untuk order melalui WhatsApp.</p></div>
+        <a class="btn wa-link" data-message="Halo, saya mau order KANG CR/POINT." href="#kontak">MAU ORDER SEKARANG ↗</a>
       </div>
       <p class="notice">Penting: tombol WhatsApp belum terhubung sampai kamu mengganti nomor contoh di kode dengan nomor WhatsApp milikmu.</p>
     </div>
@@ -177,7 +177,8 @@
   const MESSAGE = "Halo VERONOPR+POINT, saya ingin bertanya tentang layanan kamu.";
   document.getElementById("year").textContent = new Date().getFullYear();
   document.querySelectorAll(".wa-link").forEach(link => {
-    link.href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(MESSAGE);
+    const message = link.dataset.message || MESSAGE;
+    link.href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
     link.target = "_blank";
     link.rel = "noopener";
     link.addEventListener("click", event => {
