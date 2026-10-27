@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="VERONOPR+POINT — layanan dan produk pilihan. Hubungi kami melalui WhatsApp.">
+  <title>VERONOPR+POINT | Website Resmi</title>
+  <style>
+    :root { --bg:#0b1120; --panel:#121c2f; --panel2:#18253b; --text:#f5f7ff; --muted:#b7c3d8; --cyan:#67e8f9; --blue:#818cf8; --line:rgba(255,255,255,.12); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--text); background:radial-gradient(circle at 85% 0%,#1c2a51 0,transparent 34%),var(--bg); line-height:1.6; }
+    a { color:inherit; text-decoration:none; }
+    .wrap { width:min(1080px,92%); margin:auto; }
+    header { position:sticky; top:0; z-index:5; background:rgba(11,17,32,.88); backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+    nav { min-height:68px; display:flex; justify-content:space-between; align-items:center; gap:16px; }
+    .brand { font-weight:900; letter-spacing:.4px; font-size:1.08rem; }
+    .brand span { color:var(--cyan); }
+    .navlinks { display:flex; gap:18px; align-items:center; font-size:.92rem; color:var(--muted); }
+    .navlinks a:hover { color:white; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 18px; border-radius:13px; font-weight:800; background:linear-gradient(135deg,var(--cyan),#a5b4fc); color:#08111f; border:0; cursor:pointer; box-shadow:0 8px 25px rgba(103,232,249,.12); }
+    .btn.secondary { background:transparent; color:var(--text); border:1px solid var(--line); box-shadow:none; }
+    .hero { padding:76px 0 54px; display:grid; grid-template-columns:1.2fr .8fr; gap:30px; align-items:center; }
+    .eyebrow { display:inline-block; border:1px solid rgba(103,232,249,.35); color:var(--cyan); background:rgba(103,232,249,.08); padding:6px 11px; border-radius:999px; font-size:.8rem; font-weight:800; }
+    h1 { font-size:clamp(2.35rem,6vw,4.7rem); line-height:1.04; letter-spacing:-2px; margin:18px 0; }
+    h1 span { color:var(--cyan); }
+    .lead { color:var(--muted); font-size:1.08rem; max-width:600px; }
+    .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:25px; }
+    .hero-card { border:1px solid var(--line); border-radius:28px; padding:24px; background:linear-gradient(160deg,rgba(129,140,248,.14),rgba(18,28,47,.92)); box-shadow:0 20px 60px rgba(0,0,0,.22); }
+    .orb { width:100%; aspect-ratio:1.15; border-radius:22px; display:grid; place-items:center; background:radial-gradient(circle,#273e65,#111b30 68%); }
+    .orb .symbol { font-size:clamp(4rem,12vw,7rem); font-weight:950; color:var(--cyan); text-shadow:0 0 38px rgba(103,232,249,.35); }
+    .mini { color:var(--muted); font-size:.9rem; margin-top:16px; }
+    section { padding:42px 0; }
+    .section-head { margin-bottom:22px; }
+    h2 { margin:0 0 8px; font-size:clamp(1.7rem,4vw,2.35rem); letter-spacing:-.6px; }
+    .sub { color:var(--muted); margin:0; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .card { background:rgba(18,28,47,.88); border:1px solid var(--line); border-radius:20px; padding:21px; }
+    .card .icon { width:45px; height:45px; display:grid; place-items:center; border-radius:14px; background:rgba(103,232,249,.1); font-size:1.35rem; margin-bottom:13px; }
+    .card h3 { margin:0 0 7px; font-size:1.08rem; }
+    .card p { margin:0; color:var(--muted); font-size:.94rem; }
+    .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; counter-reset:step; }
+    .step { padding:18px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.025); }
+    .step:before { counter-increment:step; content:"0" counter(step); color:var(--cyan); font-weight:900; font-size:1.2rem; }
+    .contact { padding:28px; border-radius:26px; border:1px solid rgba(103,232,249,.25); background:linear-gradient(120deg,rgba(103,232,249,.09),rgba(129,140,248,.1)); display:flex; justify-content:space-between; align-items:center; gap:20px; }
+    .contact p { color:var(--muted); margin:6px 0 0; }
+    footer { margin-top:40px; padding:24px 0; border-top:1px solid var(--line); color:var(--muted); font-size:.88rem; }
+    .footrow { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    .notice { font-size:.85rem; color:#fcd9a6; margin-top:14px; }
+    @media (max-width:720px) {
+      .navlinks a:not(.btn) { display:none; }
+      .hero { grid-template-columns:1fr; padding-top:48px; }
+      .hero-card { max-width:500px; width:100%; margin:auto; }
+      .grid,.steps { grid-template-columns:1fr; }
+      .contact { align-items:flex-start; flex-direction:column; }
+      h1 { letter-spacing:-1.2px; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <nav class="wrap">
+    <a class="brand" href="#home">VERONOPR<span>+POINT</span></a>
+    <div class="navlinks">
+      <a href="#layanan">Layanan</a>
+      <a href="#tentang">Tentang</a>
+      <a href="#kontak" class="btn">Hubungi kami ↗</a>
+    </div>
+  </nav>
+</header>
+
+<main id="home">
+  <div class="wrap hero">
+    <div>
+      <span class="eyebrow">WEBSITE RESMI • VERONOPR+POINT</span>
+      <h1>Solusi pilihan,<br><span>lebih mudah.</span></h1>
+      <p class="lead">Selamat datang di VERONOPR+POINT. Temukan informasi layanan kami dan hubungi tim kami langsung melalui WhatsApp untuk bertanya atau melakukan pemesanan.</p>
+      <div class="actions">
+        <a class="btn wa-link" href="#kontak">Chat WhatsApp ↗</a>
+        <a class="btn secondary" href="#layanan">Lihat informasi</a>
+      </div>
+      <p class="notice">Catatan: sesuaikan bagian layanan dengan bisnis kamu sebelum dipublikasikan.</p>
+    </div>
+    <div class="hero-card">
+      <div class="orb"><div class="symbol">V<span style="color:#818cf8">+</span></div></div>
+      <div class="mini"><strong style="color:white">VERONOPR+POINT</strong><br>Praktis • Responsif • Ramah HP</div>
+    </div>
+  </div>
+
+  <section id="layanan">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Informasi layanan</h2>
+        <p class="sub">Ganti judul dan deskripsi di bawah ini sesuai produk atau jasa yang kamu tawarkan.</p>
+      </div>
+      <div class="grid">
+        <article class="card"><div class="icon">✦</div><h3>Layanan Utama</h3><p>Jelaskan layanan utama VERONOPR+POINT secara singkat, jelas, dan mudah dipahami pelanggan.</p></article>
+        <article class="card"><div class="icon">⚡</div><h3>Proses Praktis</h3><p>Pelanggan bisa menghubungi kamu untuk menanyakan detail, harga, dan cara pemesanan.</p></article>
+        <article class="card"><div class="icon">💬</div><h3>Bantuan Pelanggan</h3><p>Hubungi kami melalui WhatsApp untuk mendapatkan informasi lebih lanjut.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="tentang">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Tentang VERONOPR+POINT</h2>
+        <p class="sub">Kami ingin membuat pelanggan mudah menemukan informasi dan menghubungi bisnis kami.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><h3>Lihat informasi</h3><p class="sub">Baca informasi layanan yang tersedia di website.</p></div>
+        <div class="step"><h3>Hubungi kami</h3><p class="sub">Tekan tombol WhatsApp untuk bertanya langsung.</p></div>
+        <div class="step"><h3>Konfirmasi detail</h3><p class="sub">Pastikan harga, ketersediaan, dan detail pesanan melalui chat.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontak">
+    <div class="wrap">
+      <div class="contact">
+        <div><h2>Yuk, ngobrol dengan kami.</h2><p>Punya pertanyaan atau ingin mengetahui layanan kami? Chat melalui WhatsApp.</p></div>
+        <a class="btn wa-link" href="#kontak">Mulai chat ↗</a>
+      </div>
+      <p class="notice">Penting: tombol WhatsApp belum terhubung sampai kamu mengganti nomor contoh di kode dengan nomor WhatsApp milikmu.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footrow">
+    <span>© <span id="year"></span> VERONOPR+POINT. Hak cipta dilindungi.</span>
+    <span>Dibuat untuk tampilan mobile dan desktop.</span>
+  </div>
+</footer>
+<script>
+  // GANTI 628xxxxxxxxxx dengan nomor WhatsApp kamu.
+  // Gunakan kode negara 62, tanpa tanda +, spasi, atau angka 0 di depan.
+  const WHATSAPP_NUMBER = "628xxxxxxxxxx";
+  const MESSAGE = "Halo VERONOPR+POINT, saya ingin bertanya tentang layanan kamu.";
+  document.getElementById("year").textContent = new Date().getFullYear();
+  document.querySelectorAll(".wa-link").forEach(link => {
+    link.href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(MESSAGE);
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.addEventListener("click", event => {
+      if (WHATSAPP_NUMBER.includes("x")) {
+        event.preventDefault();
+        alert("Nomor WhatsApp belum diatur. Buka file index.html dan ganti 628xxxxxxxxxx dengan nomor WhatsApp kamu.");
+      }
+    });
+  });
+</script>
+</body>
+</html>
