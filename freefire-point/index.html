@@ -52,7 +52,7 @@ function render(){
  document.getElementById("matchCount").textContent=n;
  document.getElementById("topScore").textContent=Math.max(0,...state.teams.map(total));
  document.getElementById("matchTabs").innerHTML=Array.from({length:n},(_,i)=>'<button class="match-tab '+(i===state.active?'active':'')+'" data-match="'+i+'">Match '+(i+1)+'</button>').join("");
- document.getElementById("inputRows").innerHTML=state.teams.map(t=>{const m=t.matches[state.active]||{placement:"",kills:0};const p=m.placement?Number(state.placement[m.placement]||0):0;const k=Math.max(0,Number(m.kills)||0)*Math.max(0,Number(state.killPoint)||0);return '<tr><td><input class="team-name" data-name="'+t.id+'" value="'+esc(t.name)+'" aria-label="Nama tim"></td><td><select data-place="'+t.id+'" aria-label="Posisi"><option value="">Pilih</option>'+Array.from({length:12},(_,j)=>'<option value="'+(j+1)+'" '+(String(m.placement)===String(j+1)?'selected':'')+'>#'+(j+1)+'</option>').join("")+'</select></td><td><input class="num" data-kill="'+t.id+'" type="number" min="0" step="1" value="'+(Number(m.kills)||0)+'" aria-label="Jumlah kill"></td><td>'+p+'</td><td>'+k+'</td><td class="total">'+score(t,state.active)+'</td></tr>'}).join("");
+ document.getElementById("inputRows").innerHTML=state.teams.map(t=>{const m=t.matches[state.active]||{placement:"",kills:0};const p=m.placement?Number(state.placement[m.placement]||0):0;const k=Math.max(0,Number(m.kills)||0)*Math.max(0,Number(state.killPoint)||0);return '<tr><td><input class="team-name" data-name="'+t.id+'" value="'+esc(t.name)+'" placeholder="Ketik nama tim..." aria-label="Nama tim"></td><td><select data-place="'+t.id+'" aria-label="Posisi"><option value="">Pilih</option>'+Array.from({length:12},(_,j)=>'<option value="'+(j+1)+'" '+(String(m.placement)===String(j+1)?'selected':'')+'>#'+(j+1)+'</option>').join("")+'</select></td><td><input class="num" data-kill="'+t.id+'" type="number" min="0" step="1" value="'+(Number(m.kills)||0)+'" aria-label="Jumlah kill"></td><td>'+p+'</td><td>'+k+'</td><td class="total">'+score(t,state.active)+'</td></tr>'}).join("");
  const sorted=[...state.teams].sort((a,b)=>total(b)-total(a)||totalKills(b)-totalKills(a)||a.name.localeCompare(b.name));
  document.getElementById("leaderRows").innerHTML=sorted.map((t,i)=>'<tr><td><span class="rank '+(i<3?["first","second","third"][i]:"")+'">'+(i+1)+'</span></td><td><strong>'+esc(t.name)+'</strong></td><td>'+totalKills(t)+'</td><td class="total">'+total(t)+'</td><td>'+t.matches.map((m,j)=>"M"+(j+1)+": "+score(t,j)).join(" · ")+'</td></tr>').join("");
  document.getElementById("killPoint").value=state.killPoint;
@@ -60,6 +60,16 @@ function render(){
  save();
 }
 document.getElementById("matchTabs").addEventListener("click",e=>{const b=e.target.closest("[data-match]");if(b){state.active=Number(b.dataset.match);render()}});
+document.getElementById("inputRows").addEventListener("input",e=>{
+ const el=e.target;
+ if(!el.matches("[data-name]")) return;
+ const t=state.teams.find(x=>x.id===Number(el.dataset.name));
+ if(!t) return;
+ t.name=el.value;
+ save();
+ const sorted=[...state.teams].sort((a,b)=>total(b)-total(a)||totalKills(b)-totalKills(a)||a.name.localeCompare(b.name));
+ document.getElementById("leaderRows").innerHTML=sorted.map((team,i)=>'<tr><td><span class="rank '+(i<3?["first","second","third"][i]:"")+'">'+(i+1)+'</span></td><td><strong>'+esc(team.name)+'</strong></td><td>'+totalKills(team)+'</td><td class="total">'+total(team)+'</td><td>'+team.matches.map((m,j)=>"M"+(j+1)+": "+score(team,j)).join(" · ")+'</td></tr>').join("");
+});
 document.getElementById("inputRows").addEventListener("change",e=>{const el=e.target;const t=state.teams.find(x=>x.id===Number(el.dataset.name||el.dataset.place||el.dataset.kill));if(!t)return;if(el.dataset.name)t.name=el.value.trim()||"Tim";if(el.dataset.place!==undefined)t.matches[state.active].placement=el.value;if(el.dataset.kill!==undefined)t.matches[state.active].kills=Math.max(0,Math.floor(Number(el.value)||0));render()});
 document.getElementById("placementRules").addEventListener("change",e=>{if(e.target.dataset.rule){state.placement[e.target.dataset.rule]=Math.max(0,Number(e.target.value)||0);render()}});
 document.getElementById("killPoint").addEventListener("change",e=>{state.killPoint=Math.max(0,Number(e.target.value)||0);render()});
