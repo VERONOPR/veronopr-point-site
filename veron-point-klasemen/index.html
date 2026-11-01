@@ -55,8 +55,18 @@
             <label>Rank 11–12<input id="p11" type="number" min="0" value="0"></label><label>Poin per kill<input id="killPoint" type="number" min="0" value="1"></label>
           </div>
         </div>
+        <div class="panel ocr-panel">
+          <div class="panel-title"><div><span class="panel-kicker">02 / SCREENSHOT SCANNER</span><h3>📷 Baca screenshot (OCR)</h3></div><span class="saved-label">Tesseract OCR</span></div>
+          <p class="ocr-description">Pilih screenshot hasil pertandingan. Sistem akan membaca teks pada gambar dan menampilkannya di bawah.</p>
+          <div class="ocr-controls"><input id="ocrFile" type="file" accept="image/*"><button class="primary-btn" id="readOcr" type="button">Baca gambar</button></div>
+          <div class="ocr-progress" id="ocrProgress" role="status">Belum ada gambar yang diproses.</div>
+          <img id="ocrPreview" class="ocr-preview" alt="Preview screenshot yang dipilih" hidden>
+          <label class="ocr-result-label" for="ocrText">Hasil teks dari gambar</label>
+          <textarea id="ocrText" class="ocr-text" rows="7" placeholder="Hasil pembacaan screenshot akan muncul di sini..." readonly></textarea>
+          <p class="hint">Gunakan screenshot yang jelas dan tidak blur. Periksa hasil bacaan sebelum memasukkan angka ke klasemen.</p>
+        </div>
         <div class="panel">
-          <div class="panel-title"><div><span class="panel-kicker">02 / MATCH RESULT</span><h3>📝 Data tim</h3></div><span class="saved-label" id="saveStatus">Tersimpan otomatis</span></div>
+          <div class="panel-title"><div><span class="panel-kicker">03 / MATCH RESULT</span><h3>📝 Data tim</h3></div><span class="saved-label" id="saveStatus">Tersimpan otomatis</span></div>
           <div class="team-head"><span>Nama tim</span><span>Placement</span><span>Kill</span><span>Total poin</span><span></span></div>
           <div id="teamList"></div>
           <button class="add-btn" id="addTeam">＋ Tambah tim</button>
@@ -75,6 +85,7 @@
   </main>
   <footer><div class="container"><a class="brand" href="#"><span class="brand-mark">V</span> VERON <b>POINT</b></a><p>Penghitung poin turnamen Free Fire.</p><small>© <span id="year"></span> VERON POINT KLASEMEN</small></div></footer>
   <div class="toast" id="toast" role="status"></div>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
