@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101116">
+  <meta name="description" content="Penghitung poin turnamen Free Fire otomatis.">
+  <title>VERON POINT KLASEMEN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="#"><span class="brand-mark">V</span> VERON <b>POINT</b></a>
+      <div class="nav-links"><a href="#fitur">Fitur</a><a href="#kalkulator">Kalkulator</a><a href="#klasemen">Klasemen</a></div>
+      <a class="nav-cta" href="#kalkulator">Mulai Hitung</a>
+    </div>
+  </nav>
+  <header class="hero">
+    <div class="hero-glow"></div>
+    <div class="container hero-content">
+      <span class="eyebrow"><i></i> FREE FIRE TOURNAMENT TOOL</span>
+      <h1>KLASEMEN TURNAMEN<br><span>LEBIH MUDAH & CEPAT</span></h1>
+      <p>Masukkan nama tim, placement, dan kill. Total poin serta urutan klasemen dihitung otomatis.</p>
+      <a class="primary-btn" href="#kalkulator">Mulai Hitung Sekarang <span>→</span></a>
+      <div class="hero-stats"><div><strong>12</strong><small>Placement</small></div><div><strong>Auto</strong><small>Perhitungan poin</small></div><div><strong>Live</strong><small>Update klasemen</small></div></div>
+    </div>
+  </header>
+  <main>
+    <section class="section" id="fitur">
+      <div class="container">
+        <div class="section-heading"><span class="eyebrow">FITUR UTAMA</span><h2>Semua yang dibutuhkan panitia</h2><p>Ringkas, mudah digunakan, dan nyaman dibuka lewat HP.</p></div>
+        <div class="feature-grid">
+          <article class="feature"><div class="feature-icon">⚡</div><h3>Hitung Otomatis</h3><p>Poin placement dan kill langsung dijumlahkan saat data diubah.</p></article>
+          <article class="feature"><div class="feature-icon">🏆</div><h3>Klasemen Langsung</h3><p>Peringkat tim otomatis diurutkan dari total poin tertinggi.</p></article>
+          <article class="feature"><div class="feature-icon">⚙️</div><h3>Poin Bisa Diatur</h3><p>Ubah aturan placement dan poin kill sesuai turnamen.</p></article>
+          <article class="feature"><div class="feature-icon">📱</div><h3>Ramah HP</h3><p>Tampilan menyesuaikan layar ponsel maupun komputer.</p></article>
+        </div>
+      </div>
+    </section>
+    <section class="section calculator-section" id="kalkulator">
+      <div class="container">
+        <div class="section-heading"><span class="eyebrow">MATCH CONTROL</span><h2>Kalkulator poin</h2><p>Ubah aturan poin jika diperlukan, lalu masukkan hasil setiap tim.</p></div>
+        <div class="panel">
+          <div class="panel-title"><div><span class="panel-kicker">01 / SETTINGS</span><h3>⚙️ Aturan poin</h3></div><button class="text-btn" id="defaultPoints">Kembalikan default</button></div>
+          <div class="config-grid" id="pointConfig">
+            <label>Rank 1<input id="p1" type="number" min="0" value="12"></label><label>Rank 2<input id="p2" type="number" min="0" value="9"></label>
+            <label>Rank 3<input id="p3" type="number" min="0" value="8"></label><label>Rank 4<input id="p4" type="number" min="0" value="7"></label>
+            <label>Rank 5<input id="p5" type="number" min="0" value="6"></label><label>Rank 6<input id="p6" type="number" min="0" value="5"></label>
+            <label>Rank 7<input id="p7" type="number" min="0" value="4"></label><label>Rank 8<input id="p8" type="number" min="0" value="3"></label>
+            <label>Rank 9<input id="p9" type="number" min="0" value="2"></label><label>Rank 10<input id="p10" type="number" min="0" value="1"></label>
+            <label>Rank 11–12<input id="p11" type="number" min="0" value="0"></label><label>Poin per kill<input id="killPoint" type="number" min="0" value="1"></label>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title"><div><span class="panel-kicker">02 / MATCH RESULT</span><h3>📝 Data tim</h3></div><span class="saved-label" id="saveStatus">Tersimpan otomatis</span></div>
+          <div class="team-head"><span>Nama tim</span><span>Placement</span><span>Kill</span><span>Total poin</span><span></span></div>
+          <div id="teamList"></div>
+          <button class="add-btn" id="addTeam">＋ Tambah tim</button>
+          <div class="actions"><button class="primary-btn" id="calculate">Hitung ulang</button><button class="secondary-btn" id="export">↓ Export CSV</button><button class="danger-btn" id="reset">Reset data</button></div>
+          <p class="hint">Data tersimpan otomatis di browser perangkat ini. Unduh CSV untuk menyimpan salinan hasil.</p>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="klasemen">
+      <div class="container">
+        <div class="section-heading"><span class="eyebrow">LIVE LEADERBOARD</span><h2>🏆 Klasemen turnamen</h2><p>Urutan diperbarui otomatis setiap kali data tim berubah.</p></div>
+        <div class="board-summary"><div><small>JUMLAH TIM</small><strong id="teamCount">0</strong></div><div><small>TOTAL KILL</small><strong id="killCount">0</strong></div><div><small>POIN TERTINGGI</small><strong id="topScore">0</strong></div></div>
+        <div class="table-wrap"><table class="leaderboard"><thead><tr><th>Rank</th><th>Nama Tim</th><th>Placement</th><th>Kill</th><th>Poin Placement</th><th>Poin Kill</th><th>Total</th></tr></thead><tbody id="leaderboardBody"><tr><td colspan="7" class="empty">Tambahkan tim untuk memulai klasemen.</td></tr></tbody></table></div>
+      </div>
+    </section>
+  </main>
+  <footer><div class="container"><a class="brand" href="#"><span class="brand-mark">V</span> VERON <b>POINT</b></a><p>Penghitung poin turnamen Free Fire.</p><small>© <span id="year"></span> VERON POINT KLASEMEN</small></div></footer>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
