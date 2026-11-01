@@ -19,6 +19,7 @@ header{border-bottom:1px solid var(--line);background:rgba(8,9,12,.88);backdrop-
 .rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.rules-grid label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}.rule-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #282b35}.rule-row:last-child{border-bottom:0}.rule-row span{font-size:13px}.rule-row input{width:75px}.small{font-size:12px;color:var(--muted);line-height:1.6}.footer{padding:26px 0 40px;text-align:center;color:#858998;font-size:12px}
 @media(max-width:700px){.nav{min-height:64px}.tag{display:none}.hero{padding-top:30px}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:22px}.stat label{font-size:10px}.panel{padding:13px}.rules-grid{grid-template-columns:1fr}.toolbar .btn{flex:1}.panel-head .btn{padding:9px 11px}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
 <header><div class="wrap nav"><div class="brand"><div class="mark">VP</div><div>VERON POINT<small>TOURNAMENT SCOREBOARD</small></div></div><div class="tag">FREE FIRE • AUTO SCORE</div></div></header>
@@ -32,6 +33,26 @@ header{border-bottom:1px solid var(--line);background:rgba(8,9,12,.88);backdrop-
 <div class="small" style="margin-top:10px">Catatan: posisi yang belum diisi tidak mendapat poin posisi. Nilai poin dihitung otomatis saat kamu mengubah input.</div></section>
 <section class="panel"><div class="panel-head"><div><h2>🏆 Klasemen Turnamen</h2><div class="sub">Diurutkan otomatis dari total poin terbesar.</div></div></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Nama Tim</th><th>Total Kill</th><th>Total Poin</th><th>Rincian per Match</th></tr></thead><tbody id="leaderRows"></tbody></table></div></section>
 <section class="panel"><div class="panel-head"><div><h2>⚙️ Aturan Poin</h2><div class="sub">Default umum: 1 poin per kill dan poin placement bisa disesuaikan.</div></div><button class="btn secondary" id="defaultRules">Aturan Default</button></div><div class="rules-grid"><div><label>Poin kill</label><input class="num" id="killPoint" type="number" min="0" value="1"><div class="small" style="margin-top:8px">Nilai poin untuk setiap eliminasi.</div></div><div><label>Poin berdasarkan posisi akhir</label><div id="placementRules"></div></div></div><p class="small">Default yang tersedia: #1 = 12, #2 = 9, #3 = 8, #4 = 7, #5 = 6, #6 = 5, #7 = 4, #8 = 3, #9 = 2, #10 = 1, #11–12 = 0. Sesuaikan aturan ini dengan peraturan resmi turnamenmu.</p></section>
+
+<section class="panel" id="ocrPanel">
+ <div class="panel-head"><div><h2>📷 Scan Screenshot Hasil Match</h2><div class="sub">Upload screenshot klasemen/hasil match. Teks akan dibaca otomatis, lalu periksa sebelum diterapkan.</div></div><span class="tag">OCR SCANNER</span></div>
+ <div class="flex flex-wrap items-center gap-3">
+  <input id="ocrImage" type="file" accept="image/*" class="field" style="max-width:100%">
+  <button class="btn primary" id="scanOcr" type="button">🔍 Scan Screenshot</button>
+  <span id="ocrStatus" class="small">Pilih gambar untuk mulai scan.</span>
+ </div>
+ <div id="ocrProgressWrap" class="hidden" style="margin-top:12px;background:#292e3c;border-radius:99px;height:8px;overflow:hidden"><div id="ocrProgress" style="height:100%;width:0;background:linear-gradient(90deg,#ff5722,#ffc107);transition:width .2s"></div></div>
+ <label class="block text-sm muted" style="margin-top:16px">Teks hasil OCR (boleh diperbaiki manual)
+  <textarea id="ocrText" class="field block w-full mt-2" rows="6" placeholder="Hasil teks dari screenshot akan muncul di sini..." style="width:100%;resize:vertical;line-height:1.5"></textarea>
+ </label>
+ <div class="flex flex-wrap items-center justify-between gap-3" style="margin-top:12px">
+  <span class="small">Perkiraan format baris: <b>Rank · Nama Tim · Kill</b>. Periksa nama dan angka karena OCR bisa salah baca.</span>
+  <button class="btn secondary" id="parseOcr" type="button">Baca baris dari teks</button>
+ </div>
+ <div id="ocrPreview" style="margin-top:14px"></div>
+ <button class="btn primary hidden" id="applyOcr" type="button" style="margin-top:14px">✓ Terapkan ke Match Aktif</button>
+</section>
+
 </main><footer class="wrap footer">VERON POINT • Scoreboard turnamen Free Fire • Data tersimpan di browser perangkat ini.</footer>
 <script>
 const STORE="ff-point-arena-v1";
@@ -79,6 +100,72 @@ document.getElementById("addMatch").addEventListener("click",()=>{const n=matchC
 document.getElementById("defaultRules").addEventListener("click",()=>{state.placement={...defaultPlacement};state.killPoint=1;render()});
 document.getElementById("reset").addEventListener("click",()=>{if(!confirm("Hapus semua hasil turnamen dan mulai dari 12 tim kosong?"))return;state={teams:Array.from({length:12},(_,i)=>({id:i+1,name:"Tim "+String(i+1).padStart(2,"0"),matches:[{placement:"",kills:0}]})),active:0,placement:{...defaultPlacement},killPoint:1};nextId=13;render()});
 document.getElementById("export").addEventListener("click",()=>{const sorted=[...state.teams].sort((a,b)=>total(b)-total(a));const rows=[["Peringkat","Tim","Total Kill","Total Poin",...Array.from({length:matchCount()},(_,i)=>"Match "+(i+1))],...sorted.map((t,i)=>[i+1,t.name,totalKills(t),total(t),...Array.from({length:matchCount()},(_,j)=>score(t,j))])];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");const blob=new Blob(["\\ufeff"+csv],{type:"text/csv;charset=utf-8;"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="klasemen-ff-point-arena.csv";a.click();URL.revokeObjectURL(url)});
+
+
+const ocrFile=$("ocrImage"), ocrButton=$("scanOcr"), ocrText=$("ocrText");
+let ocrRows=[];
+function parseOcrLines(raw){
+ const found=[];
+ raw.split(/\\r?\\n/).forEach(line=>{
+  const s=line.replace(/[|]/g," ").replace(/\\s+/g," ").trim();
+  if(!s) return;
+  let m=s.match(/^#?(\\d{1,2})(?:st|nd|rd|th)?[.)\\s:-]+(.+?)\\s+(\\d{1,2})$/i);
+  if(!m) m=s.match(/^(.+?)\\s+#?(\\d{1,2})\\s+(\\d{1,2})$/);
+  if(!m) return;
+  let rank,name,kills;
+  if(/^#?\\d/.test(s)){rank=Number(m[1]);name=m[2];kills=Number(m[3]);}
+  else{name=m[1];rank=Number(m[2]);kills=Number(m[3]);}
+  if(rank<1||rank>12||!name||name.length>45||/^rank|team|nama/i.test(name))return;
+  found.push({name:name.replace(/^[#.:_-]+|[#.:_-]+$/g,"").trim(),rank,kills});
+ });
+ const seen=new Set();
+ return found.filter(r=>{const k=r.name.toLowerCase();if(seen.has(k))return false;seen.add(k);return true;});
+}
+function showOcrPreview(){
+ ocrRows=parseOcrLines(ocrText.value);
+ const preview=$("ocrPreview");
+ if(!ocrRows.length){preview.innerHTML='<p class="small">Belum ada baris yang dikenali otomatis. Kamu bisa edit teks di atas atau periksa format screenshot.</p>';$("applyOcr").classList.add("hidden");return;}
+ preview.innerHTML='<div class="table-wrap"><table style="min-width:480px"><thead><tr><th>Nama Tim</th><th>Rank</th><th>Kill</th></tr></thead><tbody>'+ocrRows.map((r,i)=>'<tr><td><input class="field" style="width:100%;min-width:130px" data-ocr-name="'+i+'" value="'+safe(r.name)+'"></td><td><input class="num" type="number" min="1" max="12" data-ocr-rank="'+i+'" value="'+r.rank+'"></td><td><input class="num" type="number" min="0" data-ocr-kills="'+i+'" value="'+r.kills+'"></td></tr>').join("")+'</tbody></table></div><p class="small" style="margin-top:8px">'+ocrRows.length+' baris terdeteksi. Cocokkan lagi dengan screenshot sebelum diterapkan.</p>';
+ $("applyOcr").classList.remove("hidden");
+}
+ocrButton.addEventListener("click",async()=>{
+ const file=ocrFile.files?.[0];
+ if(!file)return toast("Pilih screenshot terlebih dahulu.");
+ if(!window.Tesseract)return toast("Mesin OCR belum termuat. Periksa koneksi internet lalu muat ulang halaman.");
+ ocrButton.disabled=true;$("ocrStatus").textContent="Memuat mesin OCR...";
+ $("ocrProgressWrap").classList.remove("hidden");$("ocrProgress").style.width="0%";
+ try{
+  const result=await Tesseract.recognize(file,"eng",{logger:m=>{
+   if(m.status==="recognizing text"){$("ocrStatus").textContent="Membaca gambar... "+Math.round((m.progress||0)*100)+"%";$("ocrProgress").style.width=Math.round((m.progress||0)*100)+"%";}
+   else $("ocrStatus").textContent=m.status==="loading tesseract core"?"Menyiapkan mesin OCR...":m.status==="loading language traineddata"?"Memuat bahasa...":m.status;
+  }});
+  ocrText.value=result.data.text||"";
+  showOcrPreview();
+  $("ocrStatus").textContent="Scan selesai. Periksa hasil pembacaan di bawah.";
+  toast("Screenshot berhasil dibaca. Periksa hasil OCR.");
+ }catch(err){console.error(err);$("ocrStatus").textContent="Scan gagal. Coba gambar yang lebih jelas.";toast("OCR gagal membaca gambar.");}
+ finally{ocrButton.disabled=false;}
+});
+$("parseOcr").addEventListener("click",showOcrPreview);
+$("ocrPreview").addEventListener("input",e=>{
+ const el=e.target;
+ if(el.dataset.ocrName!==undefined)ocrRows[Number(el.dataset.ocrName)].name=el.value;
+ if(el.dataset.ocrRank!==undefined)ocrRows[Number(el.dataset.ocrRank)].rank=Math.max(1,Math.min(12,Number(el.value)||1));
+ if(el.dataset.ocrKills!==undefined)ocrRows[Number(el.dataset.ocrKills)].kills=Math.max(0,Math.floor(Number(el.value)||0));
+});
+$("applyOcr").addEventListener("click",()=>{
+ if(!ocrRows.length)return;
+ const n=matchCount();ensureMatches(n);
+ let applied=0;
+ ocrRows.forEach(r=>{
+  const name=String(r.name||"").trim();if(!name)return;
+  let team=state.teams.find(t=>t.name.trim().toLowerCase()===name.toLowerCase());
+  if(!team){team={id:nextId++,name,matches:Array.from({length:n},()=>({placement:"",kills:0}))};state.teams.push(team);}
+  team.matches[state.active]={placement:String(Math.max(1,Math.min(12,Number(r.rank)||1))),kills:Math.max(0,Math.floor(Number(r.kills)||0))};
+  applied++;
+ });
+ render();toast(applied+" hasil tim diterapkan ke Match "+(state.active+1)+".");
+});
 
 load();render();
 </script>
