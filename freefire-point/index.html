@@ -18,6 +18,7 @@ header{border-bottom:1px solid var(--line);background:rgba(8,9,12,.88);backdrop-
 .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:13px}table{border-collapse:collapse;width:100%;min-width:700px;background:#101219}th,td{text-align:left;padding:11px 12px;border-bottom:1px solid #282b35}th{background:#1a1d27;color:#c6c9d4;font-size:11px;text-transform:uppercase;letter-spacing:.7px}td{font-size:14px}tr:last-child td{border-bottom:0}.team-name{width:100%;min-width:120px;border:1px solid transparent;background:transparent;color:var(--text);padding:8px;border-radius:8px}.team-name:focus,.num:focus,select:focus{outline:2px solid #ff405866;border-color:#ff4058}.num,select{background:#0b0c11;border:1px solid #343744;color:var(--text);border-radius:9px;padding:9px;min-width:70px}.num{width:84px}.total{font-size:17px;font-weight:950;color:#ff7586}.rank{display:inline-grid;place-items:center;width:29px;height:29px;border-radius:9px;background:#262934;font-weight:900}.rank.first{background:#644814;color:#ffe08a}.rank.second{background:#343844;color:#e6e8ee}.rank.third{background:#573324;color:#ffbd9c}
 .rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.rules-grid label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}.rule-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #282b35}.rule-row:last-child{border-bottom:0}.rule-row span{font-size:13px}.rule-row input{width:75px}.small{font-size:12px;color:var(--muted);line-height:1.6}.footer{padding:26px 0 40px;text-align:center;color:#858998;font-size:12px}
 @media(max-width:700px){.nav{min-height:64px}.tag{display:none}.hero{padding-top:30px}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:22px}.stat label{font-size:10px}.panel{padding:13px}.rules-grid{grid-template-columns:1fr}.toolbar .btn{flex:1}.panel-head .btn{padding:9px 11px}}
+.hidden{display:none!important}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
@@ -106,14 +107,14 @@ const ocrFile=$("ocrImage"), ocrButton=$("scanOcr"), ocrText=$("ocrText");
 let ocrRows=[];
 function parseOcrLines(raw){
  const found=[];
- raw.split(/\\r?\\n/).forEach(line=>{
-  const s=line.replace(/[|]/g," ").replace(/\\s+/g," ").trim();
+ raw.split(/\r?\n/).forEach(line=>{
+  const s=line.replace(/[|]/g," ").replace(/\s+/g," ").trim();
   if(!s) return;
-  let m=s.match(/^#?(\\d{1,2})(?:st|nd|rd|th)?[.)\\s:-]+(.+?)\\s+(\\d{1,2})$/i);
-  if(!m) m=s.match(/^(.+?)\\s+#?(\\d{1,2})\\s+(\\d{1,2})$/);
+  let m=s.match(/^#?(\d{1,2})(?:st|nd|rd|th)?[.)\s:-]+(.+?)\s+(\d{1,2})$/i);
+  if(!m) m=s.match(/^(.+?)\s+#?(\d{1,2})\s+(\d{1,2})$/);
   if(!m) return;
   let rank,name,kills;
-  if(/^#?\\d/.test(s)){rank=Number(m[1]);name=m[2];kills=Number(m[3]);}
+  if(/^#?\d/.test(s)){rank=Number(m[1]);name=m[2];kills=Number(m[3]);}
   else{name=m[1];rank=Number(m[2]);kills=Number(m[3]);}
   if(rank<1||rank>12||!name||name.length>45||/^rank|team|nama/i.test(name))return;
   found.push({name:name.replace(/^[#.:_-]+|[#.:_-]+$/g,"").trim(),rank,kills});
