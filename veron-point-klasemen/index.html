@@ -63,6 +63,7 @@
           <div class="actions"><button class="primary-btn" id="calculate">Hitung ulang</button><button class="secondary-btn" id="export">↓ Export CSV</button><button class="danger-btn" id="reset">Reset data</button></div>
           <p class="hint">Data tersimpan otomatis di browser perangkat ini. Unduh CSV untuk menyimpan salinan hasil.</p>
         </div>
+        <div class="panel ocr-panel"><div class="panel-title"><div><span class="panel-kicker">04 / SCREENSHOT SCAN</span><h3>📷 Baca screenshot & cocokkan tim</h3></div><span class="saved-label">OCR + Fuse.js</span></div><p class="ocr-description">Masukkan nama tim di tabel Data Tim terlebih dahulu. Lalu unggah screenshot hasil pertandingan untuk membaca teks dan mencocokkan nama tim.</p><div class="ocr-controls"><input id="ocrImage" type="file" accept="image/*"><button class="primary-btn" id="readImage" type="button">Baca gambar</button></div><img id="ocrPreview" class="ocr-preview" alt="Pratinjau screenshot" hidden><div class="ocr-progress" id="ocrProgress" hidden><div class="ocr-progress-track"><span id="ocrProgressBar"></span></div><small id="ocrProgressText">Menyiapkan OCR...</small></div><div id="ocrResults" class="ocr-results" aria-live="polite"><p class="ocr-empty">Hasil pembacaan dan pencocokan nama tim akan muncul di sini.</p></div><label class="ocr-raw-label" for="ocrRawText">Teks hasil OCR</label><textarea id="ocrRawText" class="ocr-raw" rows="5" placeholder="Teks dari screenshot akan tampil di sini..." readonly></textarea><p class="hint">Periksa hasil OCR secara manual. Fitur ini mencocokkan nama tim, tetapi tidak mengubah placement atau kill otomatis.</p></div>
       </div>
     </section>
     <section class="section" id="klasemen">
@@ -75,6 +76,8 @@
   </main>
   <footer><div class="container"><a class="brand" href="#"><span class="brand-mark">V</span> VERON <b>POINT</b></a><p>Penghitung poin turnamen Free Fire.</p><small>© <span id="year"></span> VERON POINT KLASEMEN</small></div></footer>
   <div class="toast" id="toast" role="status"></div>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
   <script src="script.js"></script>
 </body>
 </html>
