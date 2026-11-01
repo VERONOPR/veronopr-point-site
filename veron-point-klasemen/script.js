@@ -44,5 +44,76 @@
   $("defaultPoints").addEventListener("click",()=>{Object.entries(defaults).forEach(([k,v])=>$(k).value=v);update();showToast("Aturan poin dikembalikan ke default.");});
   $("reset").addEventListener("click",()=>{if(!confirm("Hapus semua data dan kembalikan aturan poin ke default?"))return;teams=[];nextId=1;Object.entries(defaults).forEach(([k,v])=>$(k).value=v);for(let i=0;i<4;i++)addTeam();showToast("Data berhasil direset.");});
 
+
+  function getRegisteredTeams() {
+    readRows();
+    return [...new Set(teams.map(t => t.name.trim()).filter(Boolean))];
+  }
+  function matchOcrLines(text) {
+    const registeredTeams = getRegisteredTeams();
+    const output = $("ocrResults");
+    if (!registeredTeams.length) {
+      output.innerHTML = '<p class="ocr-empty">Masukkan nama tim di bagian Data Tim terlebih dahulu, lalu jalankan OCR lagi.</p>';
+      return;
+    }
+    if (!window.Fuse) {
+      output.innerHTML = '<p class="ocr-empty">Fuse.js belum termuat. Periksa koneksi internet lalu muat ulang halaman.</p>';
+      return;
+    }
+    const fuse = new Fuse(registeredTeams, {includeScore:true, threshold:0.4, ignoreLocation:true, minMatchCharLength:2});
+    const lines = text.split(/\r?\n/).map(line => line.replace(/[|_]/g," ").replace(/\s+/g," ").trim()).filter(line => line.length >= 2);
+    const matches = lines.map(line => {
+      const cleaned = line.replace(/[0-9]/g," ").replace(/[^\p{L}\p{N} ]/gu," ").replace(/\s+/g," ").trim();
+      if (!cleaned) return null;
+      const best = fuse.search(cleaned)[0];
+      return {line, match: best && best.score < 0.6 ? best.item : null, score: best?.score};
+    }).filter(Boolean);
+    const unique = [];
+    const seen = new Set();
+    matches.forEach(item => {
+      const key = (item.match || item.line).toLowerCase();
+      if (!seen.has(key)) { seen.add(key); unique.push(item); }
+    });
+    output.innerHTML = unique.length ? unique.map(item => {
+      const status = item.match
+        ? '<div class="ocr-match">✓ ' + safeText(item.match) + ' · ' + Math.round((1-item.score)*100) + '%</div>'
+        : '<div class="ocr-no-match">Belum cocok — cek manual</div>';
+      return '<div class="ocr-result"><div><strong>' + safeText(item.line) + '</strong><small>Baris dari screenshot</small></div>' + status + '</div>';
+    }).join("") : '<p class="ocr-empty">Tidak ditemukan baris teks yang bisa dicocokkan.</p>';
+  }
+  $("ocrImage").addEventListener("change", event => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) { showToast("Pilih file gambar yang valid."); return; }
+    const preview = $("ocrPreview");
+    if (preview.dataset.objectUrl) URL.revokeObjectURL(preview.dataset.objectUrl);
+    preview.dataset.objectUrl = URL.createObjectURL(file);
+    preview.src = preview.dataset.objectUrl;
+    preview.hidden = false;
+    $("ocrResults").innerHTML = '<p class="ocr-empty">Gambar siap dibaca. Tekan tombol Baca gambar.</p>';
+    $("ocrRawText").value = "";
+  });
+  $("readImage").addEventListener("click", async () => {
+    const file = $("ocrImage").files?.[0];
+    if (!file) return showToast("Pilih screenshot terlebih dahulu.");
+    if (!window.Tesseract) return showToast("Mesin OCR belum termuat. Periksa koneksi internet.");
+    const button = $("readImage"), progress = $("ocrProgress"), bar = $("ocrProgressBar"), label = $("ocrProgressText");
+    button.disabled = true; button.textContent = "Sedang membaca..."; progress.hidden = false; bar.style.width = "0%"; label.textContent = "Menyiapkan OCR...";
+    try {
+      const result = await Tesseract.recognize(file, "eng", {logger: m => {
+        if (m.status) label.textContent = m.status + (m.progress !== undefined ? " · " + Math.round(m.progress*100) + "%" : "");
+        if (m.progress !== undefined) bar.style.width = Math.round(m.progress*100) + "%";
+      }});
+      $("ocrRawText").value = result.data.text || "";
+      matchOcrLines(result.data.text || "");
+      bar.style.width = "100%"; label.textContent = "Selesai membaca gambar.";
+      showToast("Screenshot berhasil dibaca.");
+    } catch (error) {
+      console.error("OCR Error:", error);
+      label.textContent = "Gagal membaca gambar. Coba gambar yang lebih jelas.";
+      showToast("OCR gagal. Coba lagi.");
+    } finally { button.disabled = false; button.textContent = "Baca gambar"; }
+  });
+
   $("year").textContent=new Date().getFullYear();restore();
 })();
